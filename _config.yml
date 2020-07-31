@@ -7,3 +7,50 @@ include:
   - README.md
 
 remote-theme: ChrisCompton/reverie
+
+name: DC Informatics
+author: Chris Compton
+description: Adventures in Health Informatics
+
+avatar: /images/reverie.png
+
+footer-links:
+  email: q@dcinformatics.com
+  github: ChrisCompton
+  instagram:
+  linkedin: 
+  twitter: DCDataist
+
+#disqus: 
+#google_analytics: 
+
+url: http://dcinformatics.com
+enforce_ssl: https://dcinformatics.com
+
+permalink: /:title/
+
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    css_class: 'highlight'
+
+sass:
+  style: :expanded
+
+plugins:
+  - jekyll-sitemap
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-paginate
+
+include: ['_pages']
+
+paginate: 6
+paginate_path: /page:num/
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - LICENSE
+  - CNAME
