@@ -6,4 +6,4 @@ relative_links:
 include:
   - README.md
 
-remote-theme: informaticistdotorg/minimal
+remote-theme: ChrisCompton/reverie
