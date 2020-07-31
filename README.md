@@ -1,3 +1,3 @@
-# dcinformatics
+# DC Informatics
 
 Coming Soon
