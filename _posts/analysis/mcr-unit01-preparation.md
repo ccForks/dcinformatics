@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Analyzing the Medicare Cost Report Data: Preparation"
-date: 2020-01-25T10:35:56-06:00
+date: 2020-01-25 10:35:56 -0600
 categories: Analytics
 tags: ["Python", "Medicare", "Dask"]
 published: true
