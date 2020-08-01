@@ -7,6 +7,8 @@ tags: ["Python", "Medicare", "Dask"]
 published: true
 ---
 
+In this article, you will learn how to download and extract Medicare Cost Report Data.  You will use Python and Dask to manipulate these data into a usable format, and export to Parquet files which can be queried directly or loaded into big data systems for analysis.
+
 # About the Data
 
 [Cost report data](https://www.cms.gov/Research-Statistics-Data-and-Systems/Downloadable-Public-Use-Files/Cost-Reports) from the U.S. Centers for Medicare and Medicaid Services (CMS) are often used for healthcare research.  A significant issue with the data is that it is not released in a manner that is ready for comprehension and discovery.  Through this series of articles, I hope to help others with that journey.  These data provide valuable insight into the U.S. healthcare system, and CMS has broad influence on the behavior and practices of hospitals and clinicians providing care.
