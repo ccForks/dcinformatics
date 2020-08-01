@@ -11,7 +11,7 @@ published: true
 
 [Cost report data](https://www.cms.gov/Research-Statistics-Data-and-Systems/Downloadable-Public-Use-Files/Cost-Reports) from the U.S. Centers for Medicare and Medicaid Services (CMS) are often used for healthcare research.  A significant issue with the data is that it is not released in a manner that is ready for comprehension and discovery.  Through this series of articles, I hope to help others with that journey.  These data provide valuable insight into the U.S. healthcare system, and CMS has broad influence on the behavior and practices of hospitals and clinicians providing care.
 
-![RPT, ALPHA, NMRC and ROLLUP are the four major table types.](/analysis/media/mcr.png#floatright "MCR Table Types")
+![RPT, ALPHA, NMRC and ROLLUP are the four major table types.](/images/media/mcr.png#floatright "MCR Table Types")
 
 In its shared form, the public use file data take a lot of work to use for analysis and research, particularly if you are trying to piece together a broad view of data across the report.  You can't use Microsoft Excel with these files because they are too big, and if you can only open one at a time, good luck understanding all of the values, and matching them to specific hospitals!
 
@@ -38,7 +38,7 @@ Before trying to implement a solution, particularly if you are inclined to first
 
 ## Rough Sketch
 
-![My sketch of a solution.](/analysis/media/mcr-unit01-preparation-approach.jpeg "Approaching the HCRIS Data")
+![My sketch of a solution.](/images/media/mcr-unit01-preparation-approach.jpeg "Approaching the HCRIS Data")
 
 ## Capturing the Steps
 
@@ -58,7 +58,7 @@ Our script will need to:
 {{< tech/lib/numpy >}}
 {{< tech/lib/dask >}}
 
-![Use the run cell feature in VS Code to prototype a solution.](/analysis/media/runcell.png#floatright "Using iPython in VS Code")
+![Use the run cell feature in VS Code to prototype a solution.](/images/media/runcell.png#floatright "Using iPython in VS Code")
 
 As you develop with VS Code, you can use the interactive Python features to help build a full script.  This allows running a small chunk of code at a time using the "Run Cell" feature that appears at any location where the ```%##``` text is found.  Rather than having to run the entire script each time you make a mistake or need to adjust something, iPython will allow you to rerun the chunk that needed adjustment.  
 
