@@ -66,54 +66,46 @@ This is great when you have a very large dataset in memory and you do not want t
 
 # Time to Code!
 
-{{< exercise >}}
-First, we need to import the libraries that are required.
-{{< /exercise >}}
+**First, we need to import the libraries that are required.**
 
 The `os` library will allow obtaining a list of files from the input directory.  The `zipfile` library will allow Python to open the zip files and extract the NMRC, ALPHA and RPT files from the archives.  The `dask` library is the tool that will allow importing the csv file into Python, and performing actions on the records. The `numpy` library will help assign data types to certain fields so that numeric values will maintain the intended format.
 
-{% highlight python3 linenos %}
+```python
 #%% Import Libraries
 import os
 import zipfile
 import dask.dataframe as dd
 import numpy as np
-{% endhighlight %}
+```
 
-{{< exercise >}}
-2.) Create directories, and set the values.
-{{< /exercise >}}
+**2.) Create directories, and set the values.**
 
 The code below expects a folder `data` that has the zipped files in it.  It also will expect an `output` folder as the destination for the prepared data files to be used by an analysis script.  Please make sure these folders exist in the location you are building the script.
 
-{% highlight python3 linenos %}
+```python
 #%% Set Paths
 input_folder = "data"
 output_folder = "output"
-{% endhighlight %}
+```
 
-{{< exercise >}}
-3.) Loop through each zip file in the output directory, and extract the csv files.
-{{< /exercise >}}
+**3.) Loop through each zip file in the output directory, and extract the csv files.**
 
 This step doesn't require a lot of explanation.  The code grabs the list of files from the input directory, and then unzips them. You could have many years in this directory, and the script would handle them.
 
-{% highlight python3 linenos %}
+```python
 #%% Unzip Archives
 for file in os.listdir(input_folder):
     filename = os.path.join(input_folder,file)
     if filename.lower().endswith(".zip"):
         with zipfile.ZipFile(os.path.abspath(filename),"r") as zipped:
             zipped.extractall(input_folder)
-{% endhighlight %}
+```
 
-{{< exercise >}}
-4.) Set up the field names expected from each type of csv file.
-{{< /exercise >}}
+**4.) Set up the field names expected from each type of csv file.**
 
 This is where you specify the field names used when importing the CSV data.  I used the standard ones that I've used in the past, but you could make these more user friendly.  Just be aware that you will need to make the same adjustments to field names below, particularly on the identifier ("key") fields.
 
-{% highlight python3 linenos %}
+```python
 #%% Setup Columns
 colRPT = ['RPT_REC_NUM','PRVDR_CTRL_TYPE_CD','PRVDR_NUM','NPI','RPT_STUS_CD', \
             'FY_BGN_DT','FY_END_DT','PROC_DT','INITL_RPT_SW','LAST_RPT_SW', \
@@ -121,46 +113,40 @@ colRPT = ['RPT_REC_NUM','PRVDR_CTRL_TYPE_CD','PRVDR_NUM','NPI','RPT_STUS_CD', \
             'SPEC_IND','FI_RCPT_DT']
 colNMRC = ['RPT_REC_NUM','WKSHT_CD','LINE_NUM','CLMN_NUM','ITM_VAL']
 colALPHA = ['RPT_REC_NUM','WKSHT_CD','LINE_NUM','CLMN_NUM','ITM_VAL']
-{% endhighlight %}
+```
 
-{{< exercise >}}
-5.) Read each type of csv file into a dataframe.
-{{< /exercise >}}
+**5.) Read each type of csv file into a dataframe.**
 
 When reading in the data into the dataframe, the file path accepts the `*` symbol as a wildcard.  This allows you to match a group of files rather than specifying each file, or looping through the load.
 
 This particular match with work on files from 2010 forward.  If you have additional years, you can adjust.
 
-{% highlight python3 linenos %}
+```python
 #%% Read data into Dask dataframe (201X Files)
 dfRPT = dd.read_csv(input_folder + '/*_201*_RPT.CSV', header=None, names=colRPT, dtype='str')
 dfNMRC = dd.read_csv(input_folder + '/*_201*_NMRC.CSV', header=None, names=colNMRC, dtype='str')
 dfALPHA = dd.read_csv(input_folder + '/*_201*_ALPHA.CSV', header=None, names=colALPHA, dtype='str')
-{% endhighlight %}
+```
 
-{{< exercise >}}
-6.) Gather the metadata that will help identify fields in the HCRIS data.
-{{< /exercise >}}
+**6.) Gather the metadata that will help identify fields in the HCRIS data.**
 
 I have prepared a field list that contains metadata on the cost report fields.  This is shared through the [OHANA Project](https://ohanaproject.org), and updates are welcome.  One of the significant burdens of the cost report data is having a reliable way to identify all of the fields, and crosswalk fields from the 1996 version of the form to the 2010.  It's not perfect, but is better that where I started a few years ago.
 
 In future articles I will discuss approaches to working with data from the older version of the form.  To start, I recommend starting with 2012, and you will only have data from the CMS-2552-10 form.  Remember, 2010 and 2011 were transition years where both forms were accepted.  This means your results may be skewed for those years since some data are reported using the older format.
 
-{% highlight python3 linenos %}
+```python
 #%% Load field descriptors
 dfFIELDS = dd.read_csv('https://raw.githubusercontent.com/ohana-project/HCRISFields/master/fields.csv', \
                 dtype='str')
-{% endhighlight %}
+```
 
-{{< exercise >}}
-7.) Force important numeric data to a string data type.
-{{< /exercise >}}
+**7.) Force important numeric data to a string data type.**
 
 When using dataframes, you need to be aware that sometimes your data will be altered.  It may or may not be important to you, but if you have numeric strings with leading zeros, those fields will likely get converted to an integer type. This means that those zeros will disappear.  For actual numbers, this isn't a concern.  
 
 In our case, the leading zeros are important, so you will want to force these key fields to a string type to preserve the format.  For example, LINE_NUM will appear as a six character string (`00100`) and the zeros are VERY important.  In this case, `00100` refers to line `1` of the form, but when converted to an integer this would instead refer to line `100`!
 
-{% highlight python3 linenos %}
+```python
 #%% Match field data types
 dtypes = {
     'WKSHT_CD':np.str,
@@ -170,11 +156,9 @@ dtypes = {
 dfNMRC = dfNMRC.astype(dtypes)
 dfALPHA = dfALPHA.astype(dtypes)
 dfFIELDS = dfFIELDS.astype(dtypes)
-{% endhighlight %}
+```
 
-{{< exercise >}}
-8.) Join the numeric data to the field metadata.  Do the same for alphanumeric dataframe.
-{{< /exercise >}}
+**8.) Join the numeric data to the field metadata.  Do the same for alphanumeric dataframe.**
 
 Now it is time to start linking the field metadata to the dataframes containing the form data.  This may take significant time depending on the number of years that you are processing.  We keep it moving by only working on two years for the example.
 
@@ -186,45 +170,39 @@ dfNMRC = dfNMRC.merge(dfFIELDS, left_on=['WKSHT_CD','LINE_NUM','CLMN_NUM'], \
 #%% Merge Field Information with Alpha Data
 dfALPHA = dfALPHA.merge(dfFIELDS, left_on=['WKSHT_CD','LINE_NUM','CLMN_NUM'], \
     right_on=['WKSHT_CD','LINE_NUM','CLMN_NUM'])
-{% endhighlight %}
+```
 
-{{< exercise >}}
-9.) Join the report metadata to the numeric and alphanumeric dataframes.
-{{< /exercise >}}
+**9.) Join the report metadata to the numeric and alphanumeric dataframes.**
 
 The `RPT` table contains the overall form information, so we will join this to each set of values. This essentially creates a denormalized record that supplies the form information and field metadata for each value.  While it is true that this isn't how we would typically store information in a database, this format makes it FAR easier to query for analysis using a simple script.
 
 This will let you concentrate on the analysis rather than the relationships, performance and linking of data in your script.
 
-{% highlight python3 linenos %}
+```python
 #%% Merge Alpha and Numeric
 dfNMRC = dfNMRC.merge(dfRPT, left_on='RPT_REC_NUM', right_on='RPT_REC_NUM')
 dfALPHA = dfALPHA.merge(dfRPT, left_on='RPT_REC_NUM', right_on='RPT_REC_NUM')
-{% endhighlight %}
+```
 
-{{< exercise >}}
-10.) Merge the numeric and alphanumeric dataframes into one.
-{{< /exercise >}}
+**10.) Merge the numeric and alphanumeric dataframes into one.**
 
 Now that we have flattened the data for all values, we can merge them all into one common dataframe.
 
-{% highlight python3 linenos %}
+```python
 #%% Combine to Final Dataframe
 dfFINAL = dfALPHA.append(dfNMRC)
-{% endhighlight %}
+```
 
-{{< exercise >}}
-11.) Export the merged data for easier access by analysis scripts.
-{{< /exercise >}}
+**11.) Export the merged data for easier access by analysis scripts.**
 
 Lastly, we export the results to compressed parquet files, and in the next article, we will read in these files and start analyzing.  If you save these files, you can reuse them without going through all of the preparation steps.
 
 When the new yearly files are released, you will need to rebuild the files.  There are techniques to be able to merge updates so you don't have to start from scratch, but that is a more advanced task so we can explore that in a later article.
 
-{% highlight python3 linenos %}
+```python
 #%% Exporting to Parquet
 dfFINAL.to_parquet(output_folder+"mcr", compression={"name": "gzip", "values": "snappy"})
-{% endhighlight %}
+```
 
 # Review
 
