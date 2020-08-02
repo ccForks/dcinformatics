@@ -6,11 +6,11 @@ relative_links:
 
 remote-theme: ChrisCompton/reverie
 
-name: DC Informatics
+name: DC on Informatics
 author: Chris Compton
 description: Adventures in Health Informatics
 
-avatar: /images/DCI.png
+avatar: /images/logo.svg
 
 footer-links:
   email: q@dcinformatics.com
