@@ -20,7 +20,7 @@ footer-links:
   twitter: DCDataist
 
 #disqus: 
-#google_analytics: 
+google_analytics: UA-50504918-4
 
 url: http://dcinformatics.com
 enforce_ssl: https://dcinformatics.com
